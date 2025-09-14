@@ -1,17 +1,18 @@
 from dotenv import load_dotenv
+
 load_dotenv()
 import uuid
-from race_handler import RACE_HANDLER
 from typing import Annotated
-from fastapi import Depends, FastAPI, HTTPException, status
+
 from authentification import create_access_token, get_current_user
+from fastapi import Depends, FastAPI, HTTPException, status
+from loguru import logger
+from pydantic import BaseModel
+from race_handler import RACE_HANDLER
 from user import CreateUser, LoginForm, User
 from user_handler import USER_HANDLER
-from pydantic import BaseModel
-from loguru import logger
 
 app = FastAPI()
-
 
 
 class Token(BaseModel):
@@ -53,6 +54,7 @@ def get_user(User: Annotated[User, Depends(get_current_user)]):
 class Form(BaseModel):
     data: str
 
+
 @app.post("/public-race")
 def join_or_create_race(user: Annotated[User, Depends(get_current_user)]):
     if user:
@@ -67,6 +69,9 @@ def join_or_create_race(user: Annotated[User, Depends(get_current_user)]):
         race_id = RACE_HANDLER.handle_public_race(user_id)
     except Exception as e:
         logger.error(f"Error joining or creating race: {e}")
-        raise HTTPException(status_code = 503, detail="Temporary error joining/creating race; please try again",
-        headers={"Retry-After": "5"})
-    return {"race_id" : race_id}
+        raise HTTPException(
+            status_code=503,
+            detail="Temporary error joining/creating race; please try again",
+            headers={"Retry-After": "5"},
+        )
+    return {"race_id": race_id}
