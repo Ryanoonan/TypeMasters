@@ -3,7 +3,7 @@ name = "backend"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = "==3.12.*"
 dependencies = [
     "annotated-types==0.7.0",
     "anyio==4.6.0",
@@ -98,4 +98,9 @@ dependencies = [
     "webencodings==0.5.1",
     "websockets==13.1",
     "yarg==0.1.9",
+]
+
+[dependency-groups]
+dev = [
+    "alembic>=1.16.5",
 ]

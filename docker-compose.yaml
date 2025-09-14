@@ -18,6 +18,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=typemasters
+      - MYSQL_USER=user
     ports: 
       - 3306:3306
 
